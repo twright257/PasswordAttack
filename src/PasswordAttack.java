@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -59,7 +60,7 @@ public class PasswordAttack {
 		try {
 			//very handy way to get MD5 bytes 
 			MessageDigest md = MessageDigest.getInstance("MD5");
-			byte[] inputBytes = md.digest(md5.getBytes());
+			byte[] inputBytes = md.digest(md5.getBytes(Charset.forName("UTF8")));
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < inputBytes.length; ++i) {
 				sb.append(Integer.toHexString((inputBytes[i] & 0xFF) | 0x100).substring(1, 3)); //pad with zeros and make 2 digit hex
