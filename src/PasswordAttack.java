@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 import javax.imageio.IIOException;
 
@@ -19,6 +20,7 @@ import javax.imageio.IIOException;
 public class PasswordAttack {
 	private String filePath = "passwords.txt"; //path to dictionary file
 	//variables of hash values to match on 
+	private HashMap passwords = new HashMap(); 
 	private String pass0 = "6f047ccaa1ed3e8e05cde1c7ebc7d958"; 
 	private String pass1 = "275a5602cd91a468a0e10c226a03a39c"; 
 	private String pass2 = "b4ba93170358df216e8648734ac2d539"; 
@@ -28,6 +30,11 @@ public class PasswordAttack {
 	//hash value array 
 	private String[] passHash = {pass0, pass1, pass2, pass3, pass4, pass5};
 	
+	public PasswordAttack() {
+		for (String p : passHash) {
+			passwords.put(p,  1); 
+		}
+	}
 
 	//read through dictionary file and pass words to MD5. Print if match 
 	public void processFile() {
@@ -36,12 +43,9 @@ public class PasswordAttack {
 		    long startTime = System.nanoTime(); //start timer 
 		    while ((line = br.readLine()) != null) {
 		       String md5Value = MD5(line);
-		       for (String p : passHash) {
-		    	   //hash match 
-		    	   if (p.equals(md5Value)) {
-		    		   System.out.println("The Password for Hash Value " + p + " is: " + line);
-		    		   System.out.println("It took " + ((System.nanoTime() - startTime) / 1000000000.0) + " seconds to find the password.\n");
-		    	   }
+		       if (passwords.containsKey(md5Value)) {
+		    	   System.out.println("The Password for Hash Value " + md5Value + " is: " + line);
+	    		   System.out.println("It took " + ((System.nanoTime() - startTime) / 1000000000.0) + " seconds to find the password.\n");
 		       }
 		    }
 		} catch (IOException e) {
